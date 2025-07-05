@@ -1,5 +1,5 @@
 
-![Todo Screenshot](./Screenshot1.png)
+![Todo Screenshot](Screenshot1.png)
 # 📝 Todo App
 
 A simple Todo application built using **Node.js**, **Express**, **MongoDB**, and **EJS** — styled with **Bootstrap 5**.
