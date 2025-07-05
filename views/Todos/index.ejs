@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title class="text-white">Todo App</title>
+  <link rel="stylesheet" href="/css/index.css">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+</head>
+<body>
+  <h1 class="text-center mt-2 text-white">My Todo List</h1>
+<div class="container mt-3 bg-black">
+  <div class="row justify-content-center">
+    <div class="col-6 offset-1"> 
+      <form action="/todos" method="POST">
+        <div class="mb-3">
+          <label for="title" class="form-label text-white ">Title :</label>
+          <input type="text" name="title" class="form-control" placeholder="Title" id="title" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label text-white">Description :</label>
+          <textarea name="description" class="form-control" id="description" placeholder="Description"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="dueDate" class="form-label text-white">Due Date :</label>
+          <input type="date" class="form-control" name="dueDate" id="dueDate" required>
+        </div  >
+       <div class="justify-content-center">
+        <button type="submit" class="btn btn-primary d-block mx-auto">Add ToDo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <hr>
+
+<h2 class="text-center my-4 text-white">Tasks</h2>
+
+<% if (todos.length === 0) { %>
+  <p class="text-center">No todos yet.</p>
+<% } else { %>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% todos.forEach(todo => { %>
+
+
+
+                           <% 
+                                 const isOverdue = !todo.completed && todo.dueDate && new Date(todo.dueDate) < new Date();
+                                     const cardClass = todo.completed
+                                                        ? 'bg-success text-white'
+                                                        : isOverdue
+                                                        ? 'bg-danger text-white'
+                                                        : 'bg-light';
+                          %>
+        <div class="col">
+          <div class="card h-100 <%= cardClass %>">
+            <div class="card-body">
+              <h5 class="card-title text-center"><%= todo.title %></h5>
+              <h6 class="card-subtitle mb-2 text-muted text-center mt-2"> <%= todo.createdAt.toDateString() %></h6>
+              <hr>
+              <div class="card-text" style="max-height: 100px; overflow-y: auto;">
+                      <%= todo.description %>
+              </div>
+              <div class="text-center">
+                <small class="text-muted">Due: 
+                <%= todo.dueDate ? new Date(todo.dueDate).toDateString() : 'No due date' %>
+
+                <% if (todo.completed) { %>
+            <span class="badge bg-dark mt-2">Completed</span>
+          <% } else if (isOverdue) { %>
+            <span class="badge bg-warning text-dark mt-2">Overdue</span>
+          <% } else { %>
+            <span class="badge bg-secondary mt-2">Pending</span>
+          <% } %>
+              </small>
+
+              </div>
+            </div>
+                <div class="card-footer d-flex justify-content-between">
+                       <!-- Done Button -->
+                      <form action="/todos/<%= todo._id %>/done" method="POST">
+                           <button onclick="return confirm('Are you sure?')" class="btn btn-success btn-sm">Done</button>
+                      </form>
+
+                       <!-- Delete Button -->
+                        <form action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
+                              <button onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                     </div>
+          </div>
+          
+        </div>
+      <% }) %>
+    </div>
+  </div>
+<% } %>
+
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  
+</body>
+</html>
